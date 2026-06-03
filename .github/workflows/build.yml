@@ -33,11 +33,14 @@ jobs:
 
     - name: Force Generate and Fix Buildozer Spec
       run: |
-        # Force a fresh default spec generation by Buildozer itself
-        rm -f buildozer.spec
+        # Completely destroy any existing spec file anywhere in the directory
+        rm -rf buildozer.spec
+        rm -f ./buildozer.spec
+        
+        # Force a completely clean initialization from scratch
         buildozer init
         
-        # Use sed to clean inject your exact settings into the official template
+        # Overwrite the settings securely using sed
         sed -i 's/^title =.*/title = Sonic Launcher/' buildozer.spec
         sed -i 's/^package.name =.*/package.name = rsdklauncher/' buildozer.spec
         sed -i 's/^package.domain =.*/package.domain = com.wildcatdev/' buildozer.spec
@@ -46,7 +49,7 @@ jobs:
         sed -i 's/^# android.permissions =.*/android.permissions = MANAGE_EXTERNAL_STORAGE/' buildozer.spec
         sed -i 's/^android.archs =.*/android.archs = arm64-v8a, armeabi-v7a/' buildozer.spec
         
-        # Core missing parameters fixes
+        # Inject the core mandatory variables Buildozer demands
         sed -i 's|^source.dir =.*|source.dir = .|' buildozer.spec
         sed -i 's/^version =.*/version = 1.0/' buildozer.spec
 
